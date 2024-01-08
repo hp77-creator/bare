@@ -18,10 +18,10 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-var keepDownloadedZip *bool = flag.BoolP("keep", "k", false, "Keep downloaded.")
-var shouldUseDefault *bool = flag.BoolP("default", "d", false, "Use default value while creating project.")
-var shouldInitGit *bool = flag.BoolP("git", "g", false, "Initialize with git version control.")
-var helpFlag = flag.BoolP("help", "h", false, "Show this message")
+var keepDownloadedZip *bool = flag.BoolP("keep", "k", false, "Keep downloaded template on your system. Default: false.")
+var shouldUseDefault *bool = flag.BoolP("default", "d", false, "Use default value while creating project. Default: false.")
+var shouldInitGit *bool = flag.BoolP("git", "g", false, "Initialize with git version control. Default: false.")
+var helpFlag = flag.BoolP("help", "h", false, "Show this message.")
 
 func init() {
 	rootCmd.AddCommand(useCmd)

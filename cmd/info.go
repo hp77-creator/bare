@@ -17,7 +17,11 @@ var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "get info about any bare on github",
 	Run: func(cmd *cobra.Command, args []string) {
-		InfoBare(args[0])
+		if len(args) == 0 {
+			fmt.Println("Please provide name of the template. \nUsage: bare info <user-name>/<repo-name>")
+		} else {
+			InfoBare(args[0])
+		}
 	},
 }
 
