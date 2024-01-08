@@ -30,6 +30,6 @@ func InfoBare(bareName string) {
 	parser.GetRecipe(user, repo, branch)
 	// TODO Add variant description
 	fmt.Println(styles.StatusPrompt.Render("Author   :"), parser.BareObj.Author)
-	fmt.Println(styles.StatusPrompt.Render("Barename :"), parser.BareObj.BareName, parser.BareObj.Version)
+	fmt.Println(styles.StatusPrompt.Render("Template :"), parser.BareObj.BareName, parser.BareObj.Version)
 	fmt.Println(styles.StatusPrompt.Render("Variants :"), strings.Trim(fmt.Sprint(parser.BareObj.Variants), "[]"))
 }

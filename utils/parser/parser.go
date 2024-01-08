@@ -4,14 +4,16 @@ import (
 	"bare/utils/osutil"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 )
 
-const raw_url = "https://raw.githubusercontent.com/"
+const rawUrl = "https://raw.githubusercontent.com/"
+const rawApiUrl = "https://api.github.com/repos/"
 
 type Bare struct {
 	Author       string
@@ -26,7 +28,7 @@ type Bare struct {
 var BareObj Bare
 
 func Parser(filePath string) {
-	data, err := ioutil.ReadFile(filePath)
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,23 +45,53 @@ func Parser(filePath string) {
 }
 
 func GetRecipe(user string, repo string, branch string) {
-	req_url := raw_url + user + "/" + repo + "/" + branch + "/recipe.json"
-	log.Println("req_url: " + req_url)
-	resp, err := http.Get(req_url)
-	if err != nil {
-		log.Fatal(err)
-	}
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	//Convert the body to type string
-	err = json.Unmarshal(body, &BareObj)
-	if err != nil {
-		log.Fatal(err)
-	}
+	if user == "bare-cli" {
+		reqUrl := rawUrl + user + "/" + repo + "/" + branch + "/recipe.json"
+		log.Println("Info: " + reqUrl)
+		resp, err := http.Get(reqUrl)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		log.Println("Response: " + resp.Status)
+		respCode, _ := strconv.Atoi(resp.Status[0:3])
+		if respCode >= 400 {
+			log.Fatal("recipe.json doesn't exist for the repo")
+		}
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		//Convert the body to type string
+		err = json.Unmarshal(body, &BareObj)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	BareObj.BarePath = osutil.GetBarePath()
+		BareObj.BarePath = osutil.GetBarePath()
+	} else {
+		reqUrl := rawApiUrl + user + "/" + repo
+		log.Println("Info: " + reqUrl)
+		resp, err := http.Get(reqUrl)
+		if err != nil {
+			log.Fatal(err)
+		}
+		respCode, _ := strconv.Atoi(resp.Status[0:3])
+		if respCode >= 400 {
+			log.Println("Response Code: " + resp.Status)
+			log.Fatal("Request didn't go through")
+		}
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		//Convert the body to type string
+		err = json.Unmarshal(body, &BareObj)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		BareObj.BarePath = osutil.GetBarePath()
+	}
 }
 
 // Return user, repo, branch
