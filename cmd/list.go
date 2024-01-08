@@ -17,7 +17,7 @@ func init() {
 
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all the saved bare",
+	Short: "list all the saved bare",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			ListBare()

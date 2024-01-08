@@ -44,6 +44,7 @@ func Parser(filePath string) {
 
 func GetRecipe(user string, repo string, branch string) {
 	req_url := raw_url + user + "/" + repo + "/" + branch + "/recipe.json"
+	log.Println("req_url: " + req_url)
 	resp, err := http.Get(req_url)
 	if err != nil {
 		log.Fatal(err)

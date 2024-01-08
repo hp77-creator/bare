@@ -17,12 +17,12 @@ func init() {
 
 var rmCmd = &cobra.Command{
 	Use:   "rm",
-	Short: "delete an exsisting bare",
+	Short: "delete an existing bare",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) >= 1 {
 			rmBare(args)
 		} else {
-			fmt.Println(styles.Error.Render("Not enought arguments"))
+			fmt.Println(styles.Error.Render("Not enough arguments"))
 		}
 	},
 }
@@ -41,7 +41,7 @@ func rmBare(delBares []string) {
 			}
 			deletedBare = append(deletedBare, bare)
 		} else {
-			fmt.Println(styles.Warning.Render("Bare does not exsist!"), bare)
+			fmt.Println(styles.Warning.Render("Bare does not exist!"), bare)
 		}
 	}
 	if len(deletedBare) > 0 {

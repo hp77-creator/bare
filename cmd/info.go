@@ -15,7 +15,7 @@ func init() {
 
 var infoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "Get info about any bare on github",
+	Short: "get info about any bare on github",
 	Run: func(cmd *cobra.Command, args []string) {
 		InfoBare(args[0])
 	},

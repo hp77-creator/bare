@@ -1,6 +1,7 @@
 node_modules
 .vscode
-bin/test
+.idea
+bin
 tmp/
 dist/
 docs/site

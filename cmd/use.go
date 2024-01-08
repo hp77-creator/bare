@@ -18,9 +18,10 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-var keepDownloadedZip *bool = flag.Bool("keep", false, "Keep downloaded.")
-var shouldUseDefault *bool = flag.Bool("d", false, "Use default value while creating project.")
-var shouldInitGit *bool = flag.Bool("git", false, "Initialize with git version control.")
+var keepDownloadedZip *bool = flag.BoolP("keep", "k", false, "Keep downloaded.")
+var shouldUseDefault *bool = flag.BoolP("default", "d", false, "Use default value while creating project.")
+var shouldInitGit *bool = flag.BoolP("git", "g", false, "Initialize with git version control.")
+var helpFlag = flag.BoolP("help", "h", false, "Show this message")
 
 func init() {
 	rootCmd.AddCommand(useCmd)
@@ -29,7 +30,8 @@ func init() {
 
 var useCmd = &cobra.Command{
 	Use:   "use",
-	Short: "Create a project from all your bares",
+	Short: "create project from your previous projects bare-bones",
+	Long:  "This command will create new project for you from your existing project(bare-bones)\nExisting project should be a github template\nUsage: bare <github-template-name> <destination>",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := validate.ValidateArgCount(2, len(args))
 		if err != nil {
@@ -37,7 +39,7 @@ var useCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		useBare(args[0], args[1])
-		// bare use <bare-name> <destination>
+		// bare use <template-name> <destination>
 	},
 }
 
@@ -52,6 +54,7 @@ var TempObj NewTemplate
 
 func useBare(bareName, desti string) {
 	user, repo, branch := parser.ParseGithubRepo(bareName)
+	log.Println("Repo: " + repo + "\n User: " + user + "\n Branch: " + branch)
 	parser.GetRecipe(user, repo, branch)
 
 	// Prompt project name and template
